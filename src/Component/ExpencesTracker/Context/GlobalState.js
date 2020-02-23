@@ -1,31 +1,10 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
+import { reducer } from './Reducer';
 
 // initial state
 const initState = {
-    transactions: [
-        { id: 1, text: 'Sal', amount: 300 },
-        { id: 2, text: 'Flower', amount: -10 },
-        { id: 3, text: 'Book', amount: -20 },
-        { id: 4, text: 'Camera', amount: 150 },
-    ]
-}
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case 'DELETE':
-            console.log('delete------', action.payload)
-            return {
-                ...state,
-                transactions: state.transactions.filter(t => t.id != action.payload)
-            }
-        case 'ADD':
-            return {
-                ...state,
-                transactions: [...state.transactions, { id: Math.random(), text: action.payload.text, amount: action.payload.amount }]
-            }
-        default:
-            return state
-    }
+    transactions: []
 }
 
 // create the context
@@ -35,19 +14,31 @@ export const GlobalContext = React.createContext(initState)
 export const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initState)
 
-    const deleteTransaction = (id) => dispatch({ type: 'DELETE', payload: id })
-    const addTransaction = (transaction) => dispatch({ type: 'ADD', payload: transaction })
-    // const getData = () => {
-    //     fetch('https://jsonplaceholder.typicode.com/users')
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             console.log(json)                
-    //             dispatch({ type: 'GET_DATA', payload: json })
-    //         })
-    // }
+    // delete transaction
+    const deleteTransaction = (id) => {
+        axios.post('/expences/deleteexpence', id).then(res => {
+            console.log(res)
+            dispatch({ type: 'DELETE', payload: id })
+        })
+    }
+
+    // add transaction
+    const addTransaction = (transaction) => {
+        axios.post('/expences/add', transaction).then(res => {
+            console.log(res)
+            dispatch({ type: 'ADD', payload: transaction })
+        })
+    }
+    // get all transactions
+    const getTransactions = () => {
+        axios.get('/expences/getall').then(res => {
+            console.log(res)
+            dispatch({ type: 'ALL', payload: res.data })
+        })
+    }
 
     return (
-        <GlobalContext.Provider value={{ transactions: state.transactions, deleteTransaction, addTransaction }}>
+        <GlobalContext.Provider value={{ transactions: state.transactions, deleteTransaction, addTransaction, getTransactions }}>
             {children}
         </GlobalContext.Provider>
     )

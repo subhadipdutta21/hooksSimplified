@@ -1,10 +1,14 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('config')
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const uri = config.get('URI')
 
 const app = express()
+app.use(bodyParser.json())
+app.use(cors()) 
 
 const expencesRoute = require('./Routes/expences')
 

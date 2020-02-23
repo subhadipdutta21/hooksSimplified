@@ -2,8 +2,13 @@ import React from 'react';
 import { GlobalContext } from './Context/GlobalState';
 
 const TransactionList = () => {
-    const {transactions, deleteTransaction} = React.useContext(GlobalContext)
+    const { transactions, deleteTransaction, getTransactions } = React.useContext(GlobalContext)
     console.log(transactions)
+
+    React.useEffect(() => {
+        getTransactions()
+    }, [])
+
     return (
         <>
             <h3>History</h3>
@@ -11,7 +16,7 @@ const TransactionList = () => {
                 {transactions && transactions.map((transaction, index) => (
                     <li key={index} className={transaction.amount < 0 ? 'minus' : 'plus'}>
                         {transaction.text} <span>र{transaction.amount}</span>
-                        <button className='delete-btn' onClick={()=>deleteTransaction(transaction.id)}>X</button>
+                        <button className='delete-btn' onClick={() => deleteTransaction({ id: transaction._id })}>X</button>
                     </li>
                 ))}
             </ul>
