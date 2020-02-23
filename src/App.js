@@ -7,14 +7,21 @@ import './App.css';
 import Parent from './Component/Memo/Parent';
 import TaskList from './Component/context/TaskList';
 import TaskListContextProvider from './Component/context/TaskListContext';
+import Header from './Component/ExpencesTracker/Header';
+import { GlobalProvider } from './Component/ExpencesTracker/Context/GlobalState';
 // import Parent from './Component/LazyLoading/Parent'
 function App() {
   return (
     <div className="App">
-      <header className="App-header">    
+      <header className="App-header">
+        {/*
       <TaskListContextProvider>
       <TaskList />
-      </TaskListContextProvider>
+      </TaskListContextProvider> 
+      */}
+        <GlobalProvider >
+          <Header />
+        </GlobalProvider>
       </header>
     </div>
   );
