@@ -14,6 +14,7 @@ export const GlobalContext = React.createContext(initState)
 export const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initState)
 
+    // actions---    
     // delete transaction
     const deleteTransaction = (id) => {
         axios.post('/expences/deleteexpence', id).then(res => {
